@@ -34,7 +34,7 @@ namespace TransactionManagementSystem.Web
             services.AddDbContext<TransactionManagementSystemDbContext>(opts =>
             {
                 opts.EnableDetailedErrors();
-                opts.UseNpgsql(Configuration.GetConnectionString(""));
+                opts.UseNpgsql(Configuration.GetConnectionString("transactions.dev"));
             });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
