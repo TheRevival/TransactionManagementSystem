@@ -1,13 +1,12 @@
 using System;
+using TransactionManagementSystem.Data.Models.Enums;
 
 namespace TransactionManagementSystem.Data.Models
 {
     public class Transaction
     {
         public long Id { get; set; }
-        public long TransactionStatusId { get; set; }
         public TransactionStatus Status { get; set; }
-        public long TransactionTypeId { get; set; }
         public TransactionType Type { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }

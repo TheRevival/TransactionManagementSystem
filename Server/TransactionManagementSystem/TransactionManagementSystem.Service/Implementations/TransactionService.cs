@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TransactionManagementSystem.Data;
 using TransactionManagementSystem.Data.Models;
+using TransactionManagementSystem.Data.Models.Enums;
 using TransactionManagementSystem.Service.Exceptions;
 using TransactionManagementSystem.Service.Interfaces;
 

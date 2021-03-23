@@ -13,6 +13,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using TransactionManagementSystem.Data;
+using TransactionManagementSystem.Data.Models;
+using TransactionManagementSystem.Service.Implementations;
+using TransactionManagementSystem.Service.Interfaces;
 
 namespace TransactionManagementSystem.Web
 {
@@ -27,15 +30,20 @@ namespace TransactionManagementSystem.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "TransactionManagementSystem.Web", Version = "v1"});
             });
+            
             services.AddDbContext<TransactionManagementSystemDbContext>(opts =>
             {
                 opts.EnableDetailedErrors();
                 opts.UseNpgsql(Configuration.GetConnectionString("transactions.dev"));
             });
+
+            services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<ICsvService, CsvService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

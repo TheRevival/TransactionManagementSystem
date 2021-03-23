@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TransactionManagementSystem.Data;
@@ -9,9 +10,10 @@ using TransactionManagementSystem.Data;
 namespace TransactionManagementSystem.Data.Migrations
 {
     [DbContext(typeof(TransactionManagementSystemDbContext))]
-    partial class TransactionManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210226154616_Client")]
+    partial class Client
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +53,11 @@ namespace TransactionManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("TransactionStatusId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("TransactionTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp without time zone");
@@ -66,7 +66,44 @@ namespace TransactionManagementSystem.Data.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("TransactionStatusId");
+
+                    b.HasIndex("TransactionTypeId");
+
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("TransactionManagementSystem.Data.Models.TransactionStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionStatuses");
+                });
+
+            modelBuilder.Entity("TransactionManagementSystem.Data.Models.TransactionType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionTypes");
                 });
 
             modelBuilder.Entity("TransactionManagementSystem.Data.Models.Transaction", b =>
@@ -77,7 +114,23 @@ namespace TransactionManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TransactionManagementSystem.Data.Models.TransactionStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("TransactionStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TransactionManagementSystem.Data.Models.TransactionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TransactionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("TransactionManagementSystem.Data.Models.Client", b =>
